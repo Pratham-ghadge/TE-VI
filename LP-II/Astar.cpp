@@ -1,252 +1,184 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 #include <set>
-#include <cmath>
+#include <algorithm>
 using namespace std;
 
-/* Goal State */
-int goal[3][3] = {
-    {1, 2, 3},
-    {8, 0, 4},
-    {7, 6, 5}};
-
-struct Node
-{
-    int mat[3][3];
-    int g, h, f;
+class Node {
+public:
+    int state[3][3];
+    int g, h;
+    int x, y; // blank position
+    Node* parent;
+    
+    Node(int s[3][3], int cost, int blankX, int blankY, Node* p, int goal[3][3]) {
+        // Copy state
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                state[i][j] = s[i][j];
+            }
+        }
+        g = cost;
+        x = blankX;
+        y = blankY;
+        parent = p;
+        h = hammingHeuristic(state, goal);
+    }
+    
+    int f() const {
+        return g + h;
+    }
+    
+    // Hamming heuristic - count misplaced tiles
+    static int hammingHeuristic(int curr[3][3], int goal[3][3]) {
+        int misplaced = 0;
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(curr[i][j] != 0 && curr[i][j] != goal[i][j]) {
+                    misplaced++;
+                }
+            }
+        }
+        return misplaced;
+    }
+    
+    // Create unique key for state
+    string key() const {
+        string k = "";
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                k += (char)('0' + state[i][j]);
+                k += ",";
+            }
+        }
+        return k;
+    }
 };
 
-/* Print Matrix */
-void print(int a[3][3])
-{
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-            cout << a[i][j] << " ";
+// Comparator for priority queue (min heap based on f value)
+struct CompareNode {
+    bool operator()(Node* a, Node* b) {
+        return a->f() > b->f();
+    }
+};
+
+int goal[3][3];
+int dx[] = {-1, 1, 0, 0};  // Up, Down, Left, Right
+int dy[] = {0, 0, -1, 1};
+
+bool valid(int x, int y) {
+    return x >= 0 && y >= 0 && x < 3 && y < 3;
+}
+
+void printState(int state[3][3]) {
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            if(state[i][j] == 0)
+                cout << "_ ";
+            else
+                cout << state[i][j] << " ";
+        }
         cout << endl;
     }
+    cout << endl;
 }
 
-/* Manhattan Distance Heuristic */
-// int heuristic(int a[3][3]) {
-//     int h = 0;
-//     for (int i = 0; i < 3; i++) {
-//         for (int j = 0; j < 3; j++) {
-//             if (a[i][j] != 0) {
-//                 for (int x = 0; x < 3; x++)
-//                     for (int y = 0; y < 3; y++)
-//                         if (goal[x][y] == a[i][j])
-//                             h += abs(i - x) + abs(j - y);
-//             }
-//         }
-//     }
-//     return h;
-// }
-
-int heuristic(int a[3][3])
-{
-    int h = 0;
-
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (a[i][j] != 0 && a[i][j] != goal[i][j])
-            {
-                h++;
-            }
-        }
-    }
-
-    return h;
-}
-
-/* Check Goal */
-bool isGoal(int a[3][3])
-{
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            if (a[i][j] != goal[i][j])
-                return false;
-    return true;
-}
-
-/* Encode state to avoid revisiting */
-string encode(int a[3][3])
-{
-    string s = "";
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            s += char(a[i][j] + '0');
-    return s;
-}
-
-/* A* Algorithm with Explanation */
-void AStar(int start[3][3])
-{
-
+void solve(int start[3][3], int sx, int sy) {
+    priority_queue<Node*, vector<Node*>, CompareNode> pq;
     set<string> visited;
-
-    Node current;
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            current.mat[i][j] = start[i][j];
-
-    current.g = 0;
-    current.h = heuristic(current.mat);
-    current.f = current.g + current.h;
-
-    int step = 0;
-
-    while (true)
-    {
-
-        cout << "\n================ STEP " << step++ << " ================\n";
-        cout << "Current State:\n";
-        print(current.mat);
-        cout << "g = " << current.g << "  h = " << current.h
-             << "  f = " << current.f << endl;
-
-        if (isGoal(current.mat))
-        {
-            cout << "\n GOAL STATE REACHED\n";
+    
+    Node* startNode = new Node(start, 0, sx, sy, NULL, goal);
+    pq.push(startNode);
+    
+    int iterations = 0;
+    
+    while(!pq.empty()) {
+        Node* curr = pq.top();
+        pq.pop();
+        iterations++;
+        
+        // Goal reached when h = 0
+        if(curr->h == 0) {
+            cout << "GOAL REACHED!" << endl;
+            cout << "Total Moves: " << curr->g << endl;
+            cout << "Total Iterations: " << iterations << endl;
+            cout << "\nSOLUTION PATH:\n" << endl;
+            
+            // Reconstruct path
+            vector<Node*> path;
+            Node* temp = curr;
+            while(temp != NULL) {
+                path.push_back(temp);
+                temp = temp->parent;
+            }
+            reverse(path.begin(), path.end());
+            
+            for(int i = 0; i < path.size(); i++) {
+                cout << "Step " << i << ":" << endl;
+                printState(path[i]->state);
+            }
+            
             return;
         }
-
-        visited.insert(encode(current.mat));
-
-        int x, y;
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                if (current.mat[i][j] == 0)
-                {
-                    x = i;
-                    y = j;
+        
+        visited.insert(curr->key());
+        
+        // Try all 4 directions
+        for(int i = 0; i < 4; i++) {
+            int nx = curr->x + dx[i];
+            int ny = curr->y + dy[i];
+            
+            if(valid(nx, ny)) {
+                // Create new state
+                int newState[3][3];
+                for(int r = 0; r < 3; r++) {
+                    for(int c = 0; c < 3; c++) {
+                        newState[r][c] = curr->state[r][c];
+                    }
                 }
-
-        int dx[4] = {-1, 1, 0, 0};
-        int dy[4] = {0, 0, -1, 1};
-        string moveName[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
-
-        Node best;
-        best.f = 9999;
-
-        cout << "\nPossible Moves:\n";
-
-        for (int k = 0; k < 4; k++)
-        {
-            int nx = x + dx[k];
-            int ny = y + dy[k];
-
-            if (nx >= 0 && nx < 3 && ny >= 0 && ny < 3)
-            {
-
-                Node child = current;
-                swap(child.mat[x][y], child.mat[nx][ny]);
-
-                if (visited.count(encode(child.mat)))
-                    continue;
-
-                child.g = current.g + 1;
-                child.h = heuristic(child.mat);
-                child.f = child.g + child.h;
-
-                cout << "\nMove: " << moveName[k] << endl;
-                print(child.mat);
-                cout << "g = " << child.g
-                     << "  h = " << child.h
-                     << "  f = " << child.f << endl;
-
-                if (child.f < best.f)
-                {
-                    best = child;
+                
+                // Swap blank with adjacent tile
+                newState[curr->x][curr->y] = newState[nx][ny];
+                newState[nx][ny] = 0;
+                
+                Node* child = new Node(newState, curr->g + 1, nx, ny, curr, goal);
+                
+                if(visited.find(child->key()) == visited.end()) {
+                    pq.push(child);
                 }
             }
         }
-
-        cout << "\nSelected Move (Minimum f):\n";
-        print(best.mat);
-        cout << "f = " << best.f << endl;
-
-        current = best;
     }
+    
+    cout << "No solution found!" << endl;
 }
 
-int main()
-{
-
-    int start[3][3] = {
-        {1, 2, 3},
-        {8, 4, 5},
-        {7, 6, 0}};
-
-    AStar(start);
+int main() {
+    int start[3][3];
+    int zx = 0, zy = 0;
+    
+    cout << "Enter the initial state (use 0 for blank):" << endl;
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            cin >> start[i][j];
+            if(start[i][j] == 0) {
+                zx = i;
+                zy = j;
+            }
+        }
+    }
+    
+    cout << "Enter the goal state:" << endl;
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            cin >> goal[i][j];
+        }
+    }
+    
+    cout << "\n===== STARTING A* SEARCH =====" << endl;
+    solve(start, zx, zy);
+    
     return 0;
 }
 
-/*   OUTPUT
-
-================ STEP 0 ================
-Current State:
-1 2 3
-8 4 5
-7 6 0
-g = 0  h = 2  f = 2
-
-Possible Moves:
-
-Move: UP
-1 2 3
-8 4 0
-7 6 5
-g = 1  h = 1  f = 2
-
-Move: LEFT
-1 2 3
-8 4 5
-7 0 6
-g = 1  h = 3  f = 4
-
-Selected Move (Minimum f):
-1 2 3
-8 4 0
-7 6 5
-f = 2
-
-================ STEP 1 ================
-Current State:
-1 2 3
-8 4 0
-7 6 5
-g = 1  h = 1  f = 2
-
-Possible Moves:
-
-Move: UP
-1 2 0
-8 4 3
-7 6 5
-g = 2  h = 2  f = 4
-
-Move: LEFT
-1 2 3
-8 0 4
-7 6 5
-g = 2  h = 0  f = 2
-
-Selected Move (Minimum f):
-1 2 3
-8 0 4
-7 6 5
-f = 2
-
-================ STEP 2 ================
-Current State:
-1 2 3
-8 0 4
-7 6 5
-g = 2  h = 0  f = 2
-
-GOAL STATE REACHED
-
-*/
