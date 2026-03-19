@@ -31,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* ─── NOISE OVERLAY ─── */
   body::before {
     content: '';
     position: fixed;
@@ -42,7 +41,6 @@
     opacity: 0.4;
   }
 
-  /* ─── NAV ─── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -78,7 +76,6 @@
   }
   .nav-links a:hover { color: var(--text); }
 
-  /* ─── HERO ─── */
   .hero {
     min-height: 100vh;
     display: grid;
@@ -247,7 +244,6 @@
     animation: spin-slow 20s linear infinite reverse;
   }
 
-  /* ─── STATS ─── */
   .stats {
     padding: 2rem 4rem;
     display: flex;
@@ -268,7 +264,6 @@
   }
   .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
 
-  /* ─── SECTION ─── */
   section {
     padding: 5rem 4rem;
   }
@@ -290,7 +285,6 @@
     margin-bottom: 3rem;
   }
 
-  /* ─── SKILLS ─── */
   #skills { background: var(--surface); }
 
   .skills-grid {
@@ -338,7 +332,6 @@
   }
   .skill-pct { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
 
-  /* ─── PROJECTS ─── */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -387,7 +380,6 @@
   .project-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
   .project-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 
-  /* ─── EDUCATION ─── */
   #education { background: var(--surface); }
   .edu-timeline { position: relative; padding-left: 2rem; }
   .edu-timeline::before {
@@ -427,7 +419,6 @@
   .edu-school { color: var(--muted); font-size: 0.9rem; margin-top: 0.2rem; }
   .edu-gpa { margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent2); }
 
-  /* ─── CONTACT ─── */
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -470,7 +461,6 @@
   .form-input::placeholder { color: var(--muted); }
   textarea.form-input { resize: vertical; min-height: 120px; }
 
-  /* ─── FOOTER ─── */
   footer {
     padding: 2rem 4rem;
     border-top: 1px solid var(--border);
@@ -481,7 +471,6 @@
     font-size: 0.85rem;
   }
 
-  /* ─── CHATBOT BUTTON ─── */
   #chat-btn {
     position: fixed;
     bottom: 2rem;
@@ -522,7 +511,6 @@
     animation: pulse 2s infinite;
   }
 
-  /* ─── CHATBOT WINDOW ─── */
   #chat-window {
     position: fixed;
     bottom: 6.5rem;
@@ -596,7 +584,6 @@
   }
   .chat-close:hover { color: var(--text); }
 
-  /* ─── MESSAGES ─── */
   #chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -698,7 +685,6 @@
     30% { transform: translateY(-6px); opacity: 1; }
   }
 
-  /* ─── SUGGESTED QUESTIONS ─── */
   #suggestions {
     padding: 0 1.25rem 0.75rem;
     display: flex;
@@ -741,7 +727,6 @@
     border-color: var(--accent2) !important;
   }
 
-  /* ─── CHAT INPUT ─── */
   .chat-input-area {
     padding: 0.75rem 1.25rem 1.25rem;
     display: flex;
@@ -783,7 +768,6 @@
   #send-btn:hover { transform: scale(1.1); }
   #send-btn:active { transform: scale(0.95); }
 
-  /* ─── RESPONSIVE ─── */
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
@@ -987,18 +971,18 @@
   <div>Cambridge, MA · Available for opportunities</div>
 </footer>
 
-<!-- ─── CHATBOT BUTTON ─── -->
+<!-- CHATBOT BUTTON -->
 <button id="chat-btn" onclick="toggleChat()" title="Chat with Alex's AI Assistant">
   <span id="chat-icon">💬</span>
   <div class="chat-btn-badge"></div>
 </button>
 
-<!-- ─── CHATBOT WINDOW ─── -->
+<!-- CHATBOT WINDOW -->
 <div id="chat-window">
   <div class="chat-header">
     <div class="chat-avatar">🤖</div>
     <div class="chat-header-info">
-      <div class="chat-header-name">Alex's AI Assistant</div>
+      <div class="chat-header-name">Alex's Assistant</div>
       <div class="chat-header-status">Online · Ask me anything about Alex</div>
     </div>
     <button class="chat-close" onclick="toggleChat()">✕</button>
@@ -1016,244 +1000,132 @@
 
 <script>
 // ─────────────────────────────────────────────
-// STUDENT DATA & AI KNOWLEDGE BASE
+// RULE-BASED CHATBOT (no external AI API)
 // ─────────────────────────────────────────────
-const STUDENT_PROFILE = `
-You are an AI assistant representing Alex Rivera's portfolio. Answer questions about Alex in a friendly, helpful, and enthusiastic way. Keep answers concise (2-4 sentences) but informative.
-
-=== ALEX RIVERA — COMPLETE PROFILE ===
-
-PERSONAL:
-- Full Name: Alex Rivera
-- Age: 22
-- Location: Cambridge, Massachusetts (MIT campus)
-- Hometown: San Francisco, California
-- Email: alex.rivera@mit.edu
-- LinkedIn: linkedin.com/in/alexrivera
-- GitHub: github.com/alexrivera
-- Twitter: @alexrivera_dev
-- Pronouns: He/Him
-- Languages spoken: English, Spanish, conversational Japanese
-- Hobbies: Rock climbing, jazz piano, competitive chess (Elo: 1850), open-source contributing
-
-EDUCATION:
-- Current: B.S. Computer Science & Artificial Intelligence at MIT (2022–Present)
-- GPA: 3.9/4.0
-- Honors: Dean's List (all semesters), CS Excellence Award 2023, Undergraduate Research Fellowship
-- Previous: Westview Academy, San Francisco — Valedictorian, National Merit Scholar (2020–2022)
-- Relevant Courses: Advanced ML, Distributed Systems, Computer Vision, NLP, Algorithms, Quantum Computing (auditing)
-
-SKILLS:
-Technical:
-- React/Next.js (92%), TypeScript/Node.js (90%), Python/Django (88%)
-- PostgreSQL, MongoDB, Redis (85%), Machine Learning/TensorFlow/PyTorch (80%)
-- Cloud/DevOps: AWS, Docker, Kubernetes, CI/CD pipelines (75%)
-- Blockchain: Solidity, Web3.js, Ethereum smart contracts
-- Other: Git, REST APIs, GraphQL, WebSockets, Figma
-
-Soft Skills: Team leadership, agile/scrum, technical writing, public speaking, mentorship
-
-PROJECTS:
-1. NeuroScan AI
-   - Brain tumor detection using Convolutional Neural Networks
-   - Accuracy: 96.3% — state-of-the-art at submission
-   - Tech: Python, TensorFlow, React, Flask, Docker
-   - Impact: Deployed at 3 research hospitals; paper under review at NeurIPS
-
-2. EcoTrack Platform
-   - Carbon footprint tracking SaaS for individuals and companies
-   - Users: 2,000+ active monthly users
-   - Tech: Next.js, Node.js, PostgreSQL, Chart.js, Stripe API
-   - Press: Featured in TechCrunch and MIT News
-
-3. VaultChain
-   - Decentralized document verification on Ethereum blockchain
-   - Won 1st Place at MIT Hackathon 2024 ($10,000 prize)
-   - Tech: Solidity, Web3.js, React, IPFS
-   - Patent pending for the core verification algorithm
-
-4. StudySync (Academic project)
-   - AI-powered study group matching platform using NLP
-   - 500+ MIT students using it each semester
-   - Tech: Python, spaCy, FastAPI, React
-
-5. OpenContrib (Open Source)
-   - VSCode extension for GitHub contribution analytics
-   - 3,000+ downloads on VS Code Marketplace
-
-WORK EXPERIENCE / INTERNSHIPS:
-1. Software Engineering Intern — Google DeepMind, London (Summer 2024)
-   - Worked on LLM alignment research team
-   - Contributed to 2 published papers
-   - Built evaluation pipelines in Python/JAX
-
-2. Full-Stack Intern — Stripe, San Francisco (Winter 2023)
-   - Improved dashboard load time by 40% through optimization
-   - Implemented real-time fraud detection UI
-
-3. ML Research Assistant — MIT CSAIL (2023–Present)
-   - Professor Chen's Computer Vision Lab
-   - Focus: medical image segmentation
-
-4. Software Intern — early-stage startup YC W23 (Spring 2023)
-   - Built entire backend from scratch in 3 months
-
-5. Teaching Assistant — MIT 6.036 (Machine Learning) (Fall 2022)
-   - Graded assignments, held office hours for 120 students
-
-CERTIFICATIONS & ACHIEVEMENTS:
-- AWS Certified Solutions Architect (2024)
-- Google Cloud Professional ML Engineer (2023)
-- TensorFlow Developer Certificate (2023)
-- Hackathon wins: MIT Hack (1st), HackMIT (2nd), TreeHacks Stanford (1st)
-- Published research: "Efficient MRI Segmentation via Sparse Attention" — arXiv preprint
-- Forbes 30 Under 30 Nominee (Tech, 2025)
-
-GOALS & INTERESTS:
-- Short-term: Graduate MIT with honors, land a full-time role in AI/ML at a top company
-- Long-term: Found an AI startup focused on healthcare technology
-- Research interest: Trustworthy AI, medical imaging, human-computer interaction
-- Dream companies: Google DeepMind, OpenAI, Anthropic, or founding own startup
-- Open to: Full-time roles, internships, research collaborations, freelance projects
-
-AVAILABILITY:
-- Currently: Part-time (max 20hrs/week during semester)
-- From June 2026: Full-time (graduating May 2026)
-- Remote: Yes, anywhere in the world
-- Relocation: Open to US, UK, Canada, Europe
-
-FUN FACTS:
-- Learned to code at age 12 building Minecraft mods
-- Speaks at 3 MIT CS club talks per year
-- Organizes bi-weekly AI ethics reading group at MIT
-- Has contributed to 47 open-source repositories
-- Completed MIT's legendary 6.006 Algorithms course as a freshman
-`;
-
-// ─────────────────────────────────────────────
-// CONTEXT-AWARE SUGGESTION GROUPS
-// Each group has a label + 4 deep-dive questions
-// They cycle through topics after every bot reply
-// ─────────────────────────────────────────────
-const SUGGESTION_GROUPS = [
-  {
-    label: "🎓 Education",
-    questions: [
-      "What's Alex's GPA and academic honors?",
-      "What courses is Alex taking at MIT?",
-      "What research fellowship does Alex hold?",
-      "How did Alex get into MIT?",
-    ]
-  },
-  {
-    label: "💻 Top Skills",
-    questions: [
-      "What frontend frameworks does Alex know?",
-      "How strong is Alex's Python & ML knowledge?",
-      "What cloud & DevOps tools does Alex use?",
-      "Can Alex build full-stack applications?",
-    ]
-  },
-  {
-    label: "🧠 AI & ML Projects",
-    questions: [
-      "Tell me about NeuroScan AI in detail",
-      "What accuracy did NeuroScan AI achieve?",
-      "What ML frameworks does Alex use?",
-      "Has Alex published any ML research?",
-    ]
-  },
-  {
-    label: "🌐 Web Projects",
-    questions: [
-      "What is the EcoTrack platform?",
-      "How many users does EcoTrack have?",
-      "Tell me about the StudySync project",
-      "What tech stack does Alex prefer for web apps?",
-    ]
-  },
-  {
-    label: "🔐 Blockchain Work",
-    questions: [
-      "Tell me about VaultChain",
-      "What blockchain technologies does Alex know?",
-      "Did VaultChain win any awards?",
-      "Is Alex's blockchain work patent-pending?",
-    ]
-  },
-  {
-    label: "💼 Work Experience",
-    questions: [
-      "Where has Alex interned?",
-      "Tell me about Alex's Google DeepMind internship",
-      "What did Alex do at Stripe?",
-      "What research does Alex do at MIT CSAIL?",
-    ]
-  },
-  {
-    label: "🏆 Achievements",
-    questions: [
-      "What hackathons has Alex won?",
-      "What certifications does Alex have?",
-      "Has Alex been featured in any press?",
-      "Tell me about Alex's Forbes nomination",
-    ]
-  },
-  {
-    label: "🚀 Career Goals",
-    questions: [
-      "What are Alex's career goals?",
-      "What kind of roles is Alex looking for?",
-      "Is Alex open to remote or relocation?",
-      "When is Alex available full-time?",
-    ]
-  },
-  {
-    label: "🎯 Open Source",
-    questions: [
-      "What open-source projects has Alex made?",
-      "Tell me about the OpenContrib VS Code extension",
-      "How many repos has Alex contributed to?",
-      "How can I see Alex's GitHub work?",
-    ]
-  },
-  {
-    label: "🙋 Personal",
-    questions: [
-      "What are Alex's hobbies outside coding?",
-      "What languages does Alex speak?",
-      "How did Alex start coding?",
-      "What is Alex's personality like?",
-    ]
-  },
-  {
-    label: "📬 Hire Alex",
-    questions: [
-      "How do I contact Alex?",
-      "Is Alex available for freelance projects?",
-      "What's Alex's email address?",
-      "Is Alex open to internship or full-time offers?",
-    ]
-  },
-  {
-    label: "🔬 Research",
-    questions: [
-      "What research papers has Alex published?",
-      "What is Alex's research focus at MIT?",
-      "Who is Alex's research supervisor?",
-      "What is Alex's arXiv paper about?",
-    ]
-  },
-];
 
 let chatOpen = false;
-let conversationHistory = [];
-let usedQuestions = new Set();
-let groupIndex = 0;
+let suggestionIndex = 0;
 
-// ─────────────────────────────────────────────
-// CHAT TOGGLE
-// ─────────────────────────────────────────────
+const SUGGESTIONS_CYCLE = [
+  "What's your GPA?",
+  "Tell me about NeuroScan AI",
+  "What did you do at Google DeepMind?",
+  "Are you open to full-time roles?",
+  "Tell me about VaultChain",
+  "What’s your strongest skill?",
+  "Show me your GitHub",
+  "When do you graduate?"
+];
+
+
+
+const FAQ = [
+
+  // ───────── PERSONAL ─────────
+  { keys: ["name", "who", "yourself", "introduce", "hello", "hi"],
+    answer: "Hi! I'm Alex Rivera, a Computer Science & AI student at MIT. Nice to meet you! 🚀" },
+
+  { keys: ["age", "old"],
+    answer: "I'm 22 years old." },
+
+  { keys: ["location", "where", "live", "city", "country"],
+    answer: "I'm based in Cambridge, Massachusetts (USA), near MIT." },
+
+  { keys: ["email", "contact", "mail"],
+    answer: "You can contact me at alex.rivera@mit.edu" },
+
+  { keys: ["linkedin"],
+    answer: "LinkedIn → linkedin.com/in/alexrivera" },
+
+  { keys: ["github", "git"],
+    answer: "GitHub → github.com/alexrivera" },
+
+
+  // ───────── EDUCATION ─────────
+  { keys: ["education", "study", "studies", "academic", "background"],
+    answer: "I'm currently pursuing a B.S. in Computer Science & Artificial Intelligence at MIT." },
+
+  { keys: ["college", "university", "mit"],
+    answer: "I study at MIT (Massachusetts Institute of Technology), one of the top universities in the world." },
+
+  { keys: ["degree", "course", "branch"],
+    answer: "My degree is B.S. in Computer Science & Artificial Intelligence." },
+
+  { keys: ["gpa", "grade", "cgpa"],
+    answer: "My GPA is 3.9/4.0." },
+
+  { keys: ["school", "high school", "12th"],
+    answer: "I completed my high school from Westview Academy, San Francisco, as a valedictorian." },
+
+  { keys: ["graduate", "graduation", "passout", "finish"],
+    answer: "I'll graduate in May 2026." },
+
+
+  // ───────── SKILLS ─────────
+  { keys: ["skills", "technologies", "tech stack"],
+    answer: "My key skills include React, Node.js, Python, Machine Learning, and Cloud technologies." },
+
+  { keys: ["frontend", "react", "next"],
+    answer: "I'm highly skilled in frontend development using React and Next.js." },
+
+  { keys: ["backend", "node", "django"],
+    answer: "I build backend systems using Node.js, Django, and FastAPI." },
+
+  { keys: ["machine learning", "ml", "ai"],
+    answer: "I work with Machine Learning using TensorFlow, PyTorch, and scikit-learn." },
+
+  { keys: ["database", "db", "mongodb", "sql"],
+    answer: "I use PostgreSQL, MongoDB, and Redis for database management." },
+
+
+  // ───────── PROJECTS ─────────
+  { keys: ["projects", "work", "portfolio"],
+    answer: "I've built 12+ projects including AI systems, SaaS platforms, and blockchain apps." },
+
+  { keys: ["neuroscan", "brain", "tumor"],
+    answer: "NeuroScan AI detects brain tumors with 96.3% accuracy using CNN models." },
+
+  { keys: ["ecotrack", "carbon"],
+    answer: "EcoTrack is a SaaS platform for tracking carbon footprint with 2000+ users." },
+
+  { keys: ["vaultchain", "blockchain"],
+    answer: "VaultChain is a blockchain-based document verification system. It won 1st place at MIT Hackathon." },
+
+
+  // ───────── EXPERIENCE ─────────
+  { keys: ["internship", "experience", "work experience"],
+    answer: "I have completed 5 internships including roles at Google DeepMind and Stripe." },
+
+  { keys: ["google", "deepmind"],
+    answer: "I worked as an intern at Google DeepMind in 2024 on AI alignment research." },
+
+  { keys: ["stripe"],
+    answer: "I worked at Stripe as a full-stack intern improving dashboards and UI performance." },
+
+
+  // ───────── ACHIEVEMENTS ─────────
+  { keys: ["achievement", "awards", "wins", "hackathon"],
+    answer: "I've won 3 hackathons, received CS Excellence Award, and been on the Dean’s List." },
+
+  { keys: ["certification", "certificates"],
+    answer: "I have completed 8 professional certifications in AI, cloud, and development." },
+
+
+  // ───────── AVAILABILITY ─────────
+  { keys: ["job", "hire", "available", "work", "opportunity"],
+    answer: "I'm open to internships, freelance projects, and full-time roles starting June 2026." },
+
+  { keys: ["remote"],
+    answer: "Yes, I'm available for remote work worldwide." },
+
+
+  // ───────── FALLBACK ─────────
+  { keys: [],
+    answer: "Sorry, I didn't understand that. Try asking about education, skills, projects, or experience 😊" }
+];
+
+
+
 function toggleChat() {
   chatOpen = !chatOpen;
   const win = document.getElementById('chat-window');
@@ -1264,81 +1136,26 @@ function toggleChat() {
     setTimeout(() => win.classList.add('open'), 10);
     icon.textContent = '✕';
     document.querySelector('.chat-btn-badge').style.display = 'none';
-    if (conversationHistory.length === 0) {
-      setTimeout(() => addBotMessage("👋 Hi! I'm Alex's AI assistant. I know everything about Alex — skills, projects, experience, education, and more! What would you like to know?"), 400);
-      setTimeout(() => showSuggestions(), 800);
+
+    if (!document.querySelector('#chat-messages .msg')) {
+      setTimeout(() => {
+        addBotMessage("👋 Hey! I'm Alex's assistant. Ask me anything about Alex — projects, skills, education, internships, availability… What's up?");
+        showSuggestions();
+      }, 400);
     }
   } else {
     win.classList.remove('open');
     icon.textContent = '💬';
-    setTimeout(() => { win.style.display = 'none'; }, 300);
+    setTimeout(() => win.style.display = 'none', 300);
   }
 }
 
-// ─────────────────────────────────────────────
-// ALWAYS-ON CONTEXT-AWARE SUGGESTIONS
-// Shows after EVERY bot reply, cycling topic groups
-// Skips already-asked questions
-// ─────────────────────────────────────────────
-function showSuggestions(contextHint) {
-  const container = document.getElementById('suggestions');
-  container.innerHTML = '';
-
-  // Find best group based on context hint from last bot reply
-  let targetGroup = groupIndex;
-  if (contextHint) {
-    const hint = contextHint.toLowerCase();
-    SUGGESTION_GROUPS.forEach((g, i) => {
-      const match = g.questions.some(q => {
-        const words = q.toLowerCase().split(' ');
-        return words.some(w => w.length > 4 && hint.includes(w));
-      });
-      if (match) targetGroup = i;
-    });
-  }
-
-  const group = SUGGESTION_GROUPS[targetGroup];
-  // Advance for next time
-  groupIndex = (targetGroup + 1) % SUGGESTION_GROUPS.length;
-
-  // Build header with topic label
-  const header = document.createElement('div');
-  header.className = 'suggestion-header';
-  header.textContent = `${group.label} — explore deeper:`;
-  container.appendChild(header);
-
-  // Filter out already used questions, pick up to 4
-  const available = group.questions.filter(q => !usedQuestions.has(q));
-  // If all used in this group, reset used for this group and use all
-  const picks = available.length >= 2
-    ? available.slice(0, 4)
-    : group.questions.slice(0, 4);
-
-  picks.forEach(q => {
-    const chip = document.createElement('div');
-    chip.className = 'suggestion-chip';
-    chip.textContent = q;
-    chip.onclick = () => {
-      usedQuestions.add(q);
-      document.getElementById('chat-input').value = q;
-      sendMessage();
-    };
-    container.appendChild(chip);
-  });
-
-  // Add a "More topics →" chip that cycles to next group
-  const moreChip = document.createElement('div');
-  moreChip.className = 'suggestion-chip suggestion-more';
-  moreChip.textContent = '🔀 More topics';
-  moreChip.onclick = () => showSuggestions();
-  container.appendChild(moreChip);
-}
-
-// ─────────────────────────────────────────────
-// ADD MESSAGES
-// ─────────────────────────────────────────────
 function getTime() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function escapeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function addUserMessage(text) {
@@ -1371,105 +1188,77 @@ function addBotMessage(text) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function showTyping() {
-  const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg bot';
-  div.id = 'typing-msg';
-  div.innerHTML = `
-    <div class="msg-avatar">🤖</div>
-    <div class="typing-indicator">
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-    </div>
-  `;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+function findBestAnswer(question) {
+  const q = question.toLowerCase().trim();
+
+  for (const entry of FAQ) {
+    if (entry.keys.length === 0) continue; // skip fallback
+
+    for (const keyword of entry.keys) {
+      if (q.includes(keyword.toLowerCase())) {
+        return entry.answer;
+      }
+    }
+  }
+
+  // fallback
+  return FAQ[FAQ.length - 1].answer;
 }
 
-function removeTyping() {
-  const t = document.getElementById('typing-msg');
-  if (t) t.remove();
-}
-
-function escapeHTML(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// ─────────────────────────────────────────────
-// SEND MESSAGE
-// ─────────────────────────────────────────────
-async function sendMessage() {
+function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
 
-  // Clear suggestions while answering
-  document.getElementById('suggestions').innerHTML = '';
-
   input.value = '';
   addUserMessage(text);
 
-  // Add to history
-  conversationHistory.push({ role: 'user', content: text });
-
-  showTyping();
-  document.getElementById('send-btn').disabled = true;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: STUDENT_PROFILE,
-        messages: conversationHistory
-      })
-    });
-
-    const data = await response.json();
-    removeTyping();
-
-    let reply = "I'm having trouble connecting right now. Please try again!";
-    if (data.content && data.content[0] && data.content[0].text) {
-      reply = data.content[0].text;
-    } else if (data.error) {
-      reply = `⚠️ ${data.error.message}`;
-    }
-
-    conversationHistory.push({ role: 'assistant', content: reply });
-    addBotMessage(formatBotReply(reply));
-    // ✅ ALWAYS show suggestions after every single bot reply
-    setTimeout(() => showSuggestions(reply), 500);
-
-  } catch (err) {
-    removeTyping();
-    addBotMessage("⚠️ Connection error. Please check your network and try again.");
-    setTimeout(() => showSuggestions(), 500);
-  }
-
-  document.getElementById('send-btn').disabled = false;
+  // fake thinking delay
+  setTimeout(() => {
+    const reply = findBestAnswer(text);
+    addBotMessage(reply);
+    setTimeout(showSuggestions, 500);
+  }, 350);
 }
 
-function formatBotReply(text) {
-  // Convert **bold** to <strong>
-  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  // Convert line breaks
-  text = text.replace(/\n/g, '<br>');
-  return text;
+function showSuggestions() {
+  const container = document.getElementById('suggestions');
+  container.innerHTML = '';
+
+  const header = document.createElement('div');
+  header.className = 'suggestion-header';
+  header.textContent = 'Quick questions:';
+  container.appendChild(header);
+
+  for (let i = 0; i < 4; i++) {
+    const idx = (suggestionIndex + i) % SUGGESTIONS_CYCLE.length;
+    const q = SUGGESTIONS_CYCLE[idx];
+
+    const chip = document.createElement('div');
+    chip.className = 'suggestion-chip';
+    chip.textContent = q;
+    chip.onclick = () => {
+      document.getElementById('chat-input').value = q;
+      sendMessage();
+    };
+    container.appendChild(chip);
+  }
+
+  suggestionIndex = (suggestionIndex + 2) % SUGGESTIONS_CYCLE.length;
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter') sendMessage();
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
+  }
 }
 
-// Auto-show chat button hint after 3s
+// Optional: auto-open chat after 5 seconds (comment out if unwanted)
 setTimeout(() => {
-  const btn = document.getElementById('chat-btn');
-  btn.title = '💬 Chat with Alex\'s AI Assistant!';
-}, 3000);
+  if (!chatOpen) toggleChat();
+}, 5000);
+
 </script>
 
 </body>

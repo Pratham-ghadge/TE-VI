@@ -1,60 +1,64 @@
 #include <iostream>
-#include <climits>
+#include <vector>
+#include <queue>
 using namespace std;
 
 #define MAX 100
 
+typedef pair<int, int> pii; // (weight, vertex)
+
 int main() {
-    int n;
+    int n, e;
     cout << "Enter number of buildings: ";
     cin >> n;
 
-    int cost[MAX][MAX];
+    cout << "Enter number of connections: ";
+    cin >> e;
 
-    cout << "Enter pipe installation cost matrix:\n";
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            cin >> cost[i][j];
-        }
+    vector<pii> adj[MAX];
+
+    cout << "Enter connections (u v cost):\n";
+    for(int i = 0; i < e; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+
+        adj[u].push_back({w, v});
+        adj[v].push_back({w, u}); // undirected graph
     }
 
-    int selected[MAX];     // Track selected buildings
-    int minCost = 0;
-    
-    for(int i = 0; i < n; i++)
-        selected[i] = 0;
+    vector<int> key(n, INT_MAX);   // Minimum cost to connect
+    vector<bool> inMST(n, false);  // Track MST inclusion
 
-    selected[0] = 1;  // Start from building 1
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
 
-    cout << "\nPipelines selected:\n";
+    // Start from node 0
+    key[0] = 0;
+    pq.push({0, 0});
 
-    for(int edge = 0; edge < n-1; edge++) {
+    int totalCost = 0;
 
-        int min = INT_MAX;
-        int x = 0, y = 0;
+    while(!pq.empty()) {
+        int u = pq.top().second;
+        int weight = pq.top().first;
+        pq.pop();
 
-        for(int i = 0; i < n; i++) {
-            if(selected[i]) {
-                for(int j = 0; j < n; j++) {
-                    if(!selected[j] && cost[i][j]) {
-                        if(cost[i][j] < min) {
-                            min = cost[i][j];
-                            x = i;
-                            y = j;
-                        }
-                    }
-                }
+        if(inMST[u]) continue;
+
+        inMST[u] = true;
+        totalCost += weight;
+
+        for(auto edge : adj[u]) {
+            int v = edge.second;
+            int w = edge.first;
+
+            if(!inMST[v] && w < key[v]) {
+                key[v] = w;
+                pq.push({w, v});
             }
         }
-
-        cout << "Building " << x+1 << " - Building " << y+1
-             << "  Cost: " << cost[x][y] << endl;
-
-        minCost += cost[x][y];
-        selected[y] = 1;
     }
 
-    cout << "\nMinimum Total Pipeline Cost = " << minCost << endl;
+    cout << "\nMinimum Cost = " << totalCost << endl;
 
     return 0;
 }

@@ -1,0 +1,11 @@
+create a pem file
+
+chmod 400 VM1_key.pem
+
+ssh -i /home/pict/Documents/31348/31348_LP_II/VM1_key.pem azureuser@20.193.254.128
+
+sudo apt-get install nginx
+
+sudo systemctl start nginx
+ 
+sudo systemctl status nginx
