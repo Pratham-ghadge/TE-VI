@@ -1,8 +1,0 @@
-ssh -i /home/pict/Documents/31348/31348_LP_II/VM1_key.pem azureuser@20.193.254.128
-sudo apt update
-sudo apt-get install nginx
-sudo systemctl start nginx
-sudo systemctl status nginx
-sudo rm /var/www/html/index.nginx-debian.html
-scp -i /home/pict/Documents/31348/31348_LP_II/VM1_key.pem ./flappy.html azureuser@20.193.254.128:/home/azureuser/ # from the directory of the file
-sudo mv /home/azureuser/flappy.html /var/www/html/index.html
