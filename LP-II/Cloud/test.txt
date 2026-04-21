@@ -1,0 +1,10 @@
+Welcome to Kali Linux testing file.
+This file is used for demo purposes.
+Linux is powerful and open-source.
+File handling is important in system programming.
+This is line number five.
+Testing data helps in debugging programs.
+Security tools are widely used in Kali Linux.
+Practice makes perfect in Linux commands.
+Text files are simple and lightweight.
+End of sample test data file.

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="authApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularJS Registration & Login Assignment</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="AuthController">
+
+    <div class="main-wrapper">
+        <div class="container" ng-class="{'right-panel-active': isRegisterMode}">
+
+            <div class="form-container sign-up-container">
+                <form name="regForm" ng-submit="handleRegister(regForm.$valid)" novalidate>
+                    <h1>Create Account</h1>
+                    <span>Use your details for registration</span>
+
+                    <div class="input-group">
+                        <input type="text" ng-model="regData.fName" placeholder="First Name" required />
+                        <input type="text" ng-model="regData.lName" placeholder="Last Name" required />
+                    </div>
+
+                    <input type="text" name="uName" ng-model="regData.username" placeholder="Username" required />
+                    <p class="error-text" ng-show="regForm.uName.$touched && regForm.uName.$invalid">Username is
+                        required</p>
+
+                    <input type="password" name="pass" ng-model="regData.password" placeholder="Password"
+                        ng-minlength="6" required />
+                    <p class="error-text" ng-show="regForm.pass.$error.minlength">Min 6 characters required</p>
+
+                    <button type="submit" class="primary-btn">Sign Up</button>
+                </form>
+            </div>
+
+            <div class="form-container sign-in-container">
+                <form name="loginForm" ng-submit="handleLogin()">
+                    <h1>Sign In</h1>
+                    <span>Enter your credentials</span>
+
+                    <input type="text" ng-model="loginData.username" placeholder="Username" required />
+                    <input type="password" ng-model="loginData.password" placeholder="Password" required />
+
+                    <div class="live-status" ng-show="loginData.username">
+                        Logging in as: <strong>{{loginData.username}}</strong>
+                    </div>
+
+                    <button type="submit" class="primary-btn">Login</button>
+                </form>
+            </div>
+
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Welcome Back!</h1>
+                        <p>To keep connected with us please login with your personal info</p>
+                        <button class="ghost-btn" ng-click="toggleMode()">Sign In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1>Hello, Friend!</h1>
+                        <p>Enter your personal details and start journey with us</p>
+                        <button class="ghost-btn" ng-click="toggleMode()">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
