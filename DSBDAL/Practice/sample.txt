@@ -1,0 +1,11 @@
+Natural Language Processing (NLP) is a field of Artificial Intelligence that focuses on the interaction between computers and human language. It helps machines understand, interpret, and generate human language in a valuable way.
+
+In today's digital world, NLP plays a crucial role in applications such as chatbots, sentiment analysis, machine translation, and speech recognition. Companies use NLP to analyze customer feedback, improve user experience, and automate repetitive tasks.
+
+Tokenization is the process of breaking text into smaller units like words or sentences. Stop words are common words such as "is", "the", and "and" that are usually removed during preprocessing. Stemming reduces words to their root form, while lemmatization converts words into their meaningful base form.
+
+Part-of-Speech (POS) tagging assigns grammatical labels such as noun, verb, adjective, etc., to each word in a sentence. This helps in understanding the structure and meaning of the text.
+
+Term Frequency (TF) measures how often a word appears in a document, while Inverse Document Frequency (IDF) measures how important a word is across multiple documents. TF-IDF is a combination of both and is widely used in information retrieval and text mining.
+
+Overall, NLP is an essential technology that is transforming how humans interact with machines and enabling smarter applications in various domains.

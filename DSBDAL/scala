@@ -1,0 +1,135 @@
+========================================
+1. BUBBLE SORT USING SPARK-SHELL
+========================================
+
+----------------------------------------
+Create File
+----------------------------------------
+
+nano BubbleSort.scala
+
+
+----------------------------------------
+BubbleSort.scala
+----------------------------------------
+
+object BubbleSort {
+
+    def main(args:Array[String]): Unit = {
+
+        val arr = Array(5,0,12,6,7,0,4,79)
+
+        val n = arr.length
+
+        println("Original Array")
+
+        arr.foreach(println)
+
+        for(i <- 0 until n-1){
+
+            for(j <- 0 until n-i-1){
+
+                if(arr(j) > arr(j+1)){
+
+                    val temp = arr(j)
+
+                    arr(j) = arr(j+1)
+
+                    arr(j+1) = temp
+                }
+            }
+        }
+
+        println("Sorted Array")
+
+        arr.foreach(println)
+    }
+}
+
+
+----------------------------------------
+Start Spark Shell
+----------------------------------------
+
+spark-shell
+
+
+----------------------------------------
+Load File
+----------------------------------------
+
+:load BubbleSort.scala
+
+
+----------------------------------------
+Run Program
+----------------------------------------
+
+BubbleSort.main(Array())
+
+
+========================================
+2. WORDCOUNT USING SPARK-SHELL
+========================================
+
+----------------------------------------
+Create File
+----------------------------------------
+
+nano WordCount.scala
+
+
+----------------------------------------
+WordCount.scala
+----------------------------------------
+
+object WordCount {
+
+    def main(args:Array[String]): Unit = {
+
+        val data = sc.textFile("input.txt")
+
+        val words = data.flatMap(line => line.split(" "))
+
+        val pairs = words.map(word => (word,1))
+
+        val counts = pairs.reduceByKey(_ + _)
+
+        counts.collect().foreach(println)
+    }
+}
+
+
+----------------------------------------
+Create Input File
+----------------------------------------
+
+nano input.txt
+
+
+Example:
+
+hello world
+hello hadoop
+big data hadoop
+
+
+----------------------------------------
+Start Spark Shell
+----------------------------------------
+
+spark-shell
+
+
+----------------------------------------
+Load File
+----------------------------------------
+
+:load WordCount.scala
+
+
+----------------------------------------
+Run Program
+----------------------------------------
+
+WordCount.main(Array())

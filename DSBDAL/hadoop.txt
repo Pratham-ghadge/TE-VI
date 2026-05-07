@@ -1,0 +1,237 @@
+===============================
+HADOOP MAPREDUCE WORDCOUNT
+===============================
+
+--------------------------------
+1. WORDCOUNT JAVA PROGRAM
+--------------------------------
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
+
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCount {
+
+    // Mapper Class
+    public static class MapperClass extends Mapper<Object, Text, Text, IntWritable> {
+
+        Text word = new Text();
+        IntWritable one = new IntWritable(1);
+
+        public void map(Object key, Text value, Context context)
+                throws IOException, InterruptedException {
+
+            StringTokenizer str = new StringTokenizer(value.toString());
+
+            while (str.hasMoreTokens()) {
+
+                word.set(str.nextToken());
+
+                context.write(word, one);
+            }
+        }
+    }
+
+    // Reducer Class
+    public static class ReducerClass extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+        public void reduce(Text key, Iterable<IntWritable> values, Context context)
+                throws IOException, InterruptedException {
+
+            int sum = 0;
+
+            for (IntWritable val : values) {
+
+                sum += val.get();
+            }
+
+            context.write(key, new IntWritable(sum));
+        }
+    }
+
+    // Main Method
+    public static void main(String[] args) throws Exception {
+
+        Job job = Job.getInstance(new Configuration(), "wordcount");
+
+        job.setJarByClass(WordCount.class);
+
+        job.setMapperClass(MapperClass.class);
+
+        job.setReducerClass(ReducerClass.class);
+
+        job.setOutputKeyClass(Text.class);
+
+        job.setOutputValueClass(IntWritable.class);
+
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
+}
+
+
+--------------------------------
+2. INPUT FILE
+--------------------------------
+
+Create input.txt
+
+Example:
+
+hello hadoop
+hello world
+big data hadoop
+
+
+--------------------------------
+3. COMPILATION COMMAND
+--------------------------------
+
+javac -classpath `hadoop classpath` WordCount.java
+
+
+--------------------------------
+4. CREATE JAR FILE
+--------------------------------
+
+jar cf wordcount.jar WordCount*.class
+
+
+--------------------------------
+5. REMOVE OLD OUTPUT
+--------------------------------
+
+rm -rf output
+
+
+--------------------------------
+6. RUN HADOOP PROGRAM
+--------------------------------
+
+hadoop jar wordcount.jar WordCount input.txt output
+
+
+--------------------------------
+7. VIEW OUTPUT
+--------------------------------
+
+cat output/part-r-00000
+
+
+--------------------------------
+8. EXPECTED OUTPUT
+--------------------------------
+
+big     1
+data    1
+hadoop  2
+hello   2
+world   1
+
+
+--------------------------------
+9. IMPORTANT COMMANDS
+--------------------------------
+
+Check Java Version:
+
+java -version
+
+
+Check Hadoop Version:
+
+hadoop version
+
+
+Check Running Hadoop Nodes:
+
+jps
+
+
+--------------------------------
+10. MAPREDUCE FLOW
+--------------------------------
+
+Input File
+    ↓
+Mapper
+    ↓
+Shuffle and Sort
+    ↓
+Reducer
+    ↓
+Final Output
+
+
+--------------------------------
+11. IMPORTANT VIVA QUESTIONS
+--------------------------------
+
+Q1. What is Hadoop?
+Ans:
+Hadoop is an open-source framework used for distributed storage and processing of big data.
+
+Q2. What is MapReduce?
+Ans:
+MapReduce is a programming model used for parallel processing of large datasets.
+
+Q3. What is Mapper?
+Ans:
+Mapper processes input data and generates key-value pairs.
+
+Q4. What is Reducer?
+Ans:
+Reducer combines values of same key and generates final output.
+
+Q5. What is HDFS?
+Ans:
+HDFS stands for Hadoop Distributed File System.
+
+Q6. What is default block size in Hadoop?
+Ans:
+128 MB
+
+Q7. What is default replication factor?
+Ans:
+3
+
+Q8. Why Hadoop is fault tolerant?
+Ans:
+Because data blocks are replicated on multiple nodes.
+
+Q9. Which node stores metadata?
+Ans:
+NameNode
+
+Q10. Which node stores actual data?
+Ans:
+DataNode
+
+
+--------------------------------
+12. OUTPUT FORMAT
+--------------------------------
+
+word    count
+
+
+--------------------------------
+13. IMPORTANT NOTE
+--------------------------------
+
+Always delete old output folder before running:
+
+rm -rf output
+
+Because Hadoop does not overwrite output directories.
